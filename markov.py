@@ -61,7 +61,28 @@ def make_text(chains):
 
     words = []
 
-    # your code goes here
+    list_chains = list(chains.keys())    
+    random_tuple = choice(list_chains)
+
+
+    if random_tuple in chains:
+        third_word = choice(chains[random_tuple])
+
+        words.append(random_tuple[0])
+        words.append(random_tuple[1])
+        words.append(third_word)
+    
+    # this is our loop
+    while True:
+    # this is vaguely gross, too many type changes
+        new_key = tuple(words[-2:])
+
+        if new_key in chains:
+            last_word = choice(chains[new_key])
+            words.append(last_word)
+        else:
+            break
+
 
     return " ".join(words)
 
