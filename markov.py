@@ -1,7 +1,6 @@
 """Generate Markov text from text files."""
 
 from random import choice
-from collections import defaultdict
 
 
 def open_and_read_file(file_path):
@@ -11,7 +10,10 @@ def open_and_read_file(file_path):
     the file's contents as one string of text.
     """
 
-    text_string = open(file_path).read()
+    file = open(file_path)
+    text_string = file.read()
+    file.close()
+
     return text_string
 
 
@@ -43,15 +45,17 @@ def make_chains(text_string):
     chains = {}
 
     words = text_string.split()
-    for i in range(len(words)-2):
-        pair = (words[i], words[i+1])
-        value = words[i+2]
-        if pair in chains:
-            word_list = chains[pair]
-            word_list.append(value)
-        else:
+
+    # set a stopping point if using None to stop instead of break
+    # words.append(None)
+
+    for i in range(len(words) - 2):
+        pair = (words[i], words[i + 1])
+        value = words[i + 2]
+        if pair not in chains:
             chains[pair] = [] 
-            chains[pair].append(value)
+
+        chains[pair].append(value)
 
     return chains
 
@@ -60,19 +64,12 @@ def make_text(chains):
     """Return text from chains."""
 
     words = []
-
-    list_chains = list(chains.keys())    
-    random_tuple = choice(list_chains)
-
-
-    if random_tuple in chains:
-        third_word = choice(chains[random_tuple])
-
-        words.append(random_tuple[0])
-        words.append(random_tuple[1])
-        words.append(third_word)
+   
+    random_tuple = choice(list(chains.keys()))
+    words = [random_tuple[0], random_tuple[1]]
+    third_word = choice(chains[random_tuple])
+    words.append(third_word)
     
-    # this is our loop
     while True:
     # this is vaguely gross, too many type changes
         new_key = tuple(words[-2:])
@@ -82,7 +79,10 @@ def make_text(chains):
             words.append(last_word)
         else:
             break
-
+    
+    # if using None:
+        # while word is not None:
+            # loop
 
     return " ".join(words)
 
