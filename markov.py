@@ -46,8 +46,8 @@ def make_chains(text_string):
 
     words = text_string.split()
 
-    # set a stopping point if using None to stop instead of break
-    # words.append(None)
+    # set a stopping point 
+    words.append(None)
 
     for i in range(len(words) - 2):
         pair = (words[i], words[i + 1])
@@ -62,27 +62,16 @@ def make_chains(text_string):
 
 def make_text(chains):
     """Return text from chains."""
-
-    words = []
    
     random_tuple = choice(list(chains.keys()))
     words = [random_tuple[0], random_tuple[1]]
     third_word = choice(chains[random_tuple])
     words.append(third_word)
     
-    while True:
-    # this is vaguely gross, too many type changes
-        new_key = tuple(words[-2:])
-
-        if new_key in chains:
-            last_word = choice(chains[new_key])
-            words.append(last_word)
-        else:
-            break
-    
-    # if using None:
-        # while word is not None:
-            # loop
+    while third_word is not None:
+        random_tuple = (random_tuple[1], third_word)
+        words.append(third_word)
+        third_word = choice(chains[random_tuple])
 
     return " ".join(words)
 
