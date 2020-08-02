@@ -3,16 +3,23 @@
 from random import choice
 
 
-def open_and_read_file(file_path):
+def open_and_read_file(file_path, optional_file_path = None):
     """Take file path as string; return text as string.
 
     Takes a string that is a file path, opens the file, and turns
     the file's contents as one string of text.
     """
-
+    # optional_file_path is an optional parameter - default is nothing
     file = open(file_path)
-    text_string = file.read()
+    text_string = file.read() 
+
+    if optional_file_path != None:
+        second_file = open(optional_file_path)
+        second_string = second_file.read()
+        text_string = text_string+ " " + second_string
+    
     file.close()
+    second_file.close()
 
     return text_string
 
@@ -64,9 +71,8 @@ def make_text(chains):
     """Return text from chains."""
    
     random_tuple = choice(list(chains.keys()))
-    words = [random_tuple[0], random_tuple[1]]
+    words = [random_tuple[0].title(), random_tuple[1]]
     third_word = choice(chains[random_tuple])
-    words.append(third_word)
     
     while third_word is not None:
         random_tuple = (random_tuple[1], third_word)
@@ -75,10 +81,13 @@ def make_text(chains):
 
     return " ".join(words)
 
-
 input_path = "green-eggs.txt"
 
+# optional 2nd file if you want to combine authors
+# second_input_path = "plato_republic.txt"
+
 # Open the file and turn it into one long string
+# pass in additional second_input_path parameter, if combining two text files
 input_text = open_and_read_file(input_path)
 
 # Get a Markov chain
